@@ -76,9 +76,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Data Models ---
   const PROJECTS_DATA = [
-    { titleKey: 'project.nebula.title', techKey: 'project.nebula.tech', period: 'Q3 2023' },
-    { titleKey: 'project.fintech.title', techKey: 'project.fintech.tech', period: 'Q1 2024' },
-    { titleKey: 'project.ecommerce.title', techKey: 'project.ecommerce.tech', period: 'Q4 2023' },
+    { titleKey: 'project.nebula.title', techKey: 'project.nebula.tech', period: 'Q4 2024' },
+    { titleKey: 'project.fintech.title', techKey: 'project.fintech.tech', period: 'Q1 2025' },
+    { titleKey: 'project.ecommerce.title', techKey: 'project.ecommerce.tech', period: 'Q2 2025' },
   ];
 
   const SERVICES_CONTENT = {
