@@ -2,13 +2,243 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>マリク</title>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/src/img/favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>マリク</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
+    rel="stylesheet">
+  <link href="/src/output.css" rel="stylesheet">
+
+  <style>
+    .nav-link.active {
+      color: white;
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -0.5rem;
+      left: 0;
+      display: block;
+      height: 2px;
+      width: 100%;
+      background-color: #facc15;
+      /* yellow-400 */
+      margin-top: 0.25rem;
+      border-radius: 9999px;
+      animation: slide-in 0.3s ease-out;
+    }
+
+    @keyframes slide-in {
+      from {
+        width: 0;
+      }
+
+      to {
+        width: 100%;
+      }
+    }
+
+    /* Typewriter effect styles */
+    #hero-subheadline.typing::after {
+      content: '|';
+      color: #facc15;
+      /* yellow-400 */
+      animation: blink-caret 1s step-end infinite;
+    }
+
+    @keyframes blink-caret {
+
+      from,
+      to {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="/index.css">
 </head>
 
-<body style="text-align: center; margin-top: 20%;">
-    <h1>Cooming Soon ...</h1>
+<body class="bg-[#121212]">
+  <div class="bg-[#121212] text-gray-300 min-h-screen font-sans bg-cover bg-center bg-fixed"
+    style="background-image: url('/src/img/bg.png');">
+    <div class="absolute inset-0 bg-black/80 bg-opacity-50 backdrop-blur-xl"></div>
+
+    <div class="relative z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col min-h-screen">
+
+      <!-- Header -->
+      <header class="py-6 flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-bold tracking-wider text-white">mariku.dev</h1>
+        </div>
+        <nav class="hidden md:flex items-center space-x-10">
+          <ul class="flex items-center space-x-10" id="nav-links">
+            <li>
+              <a href="#"
+                class="nav-link text-sm font-medium transition-colors duration-300 relative text-gray-400 hover:text-white active"
+                data-lang="nav.home">Home</a>
+            </li>
+            <li>
+              <a href="#"
+                class="nav-link text-sm font-medium transition-colors duration-300 relative text-gray-400 hover:text-white"
+                data-lang="nav.projects">Projects</a>
+            </li>
+            <li>
+              <a href="#"
+                class="nav-link text-sm font-medium transition-colors duration-300 relative text-gray-400 hover:text-white"
+                data-lang="nav.about">About</a>
+            </li>
+            <li>
+              <a href="#"
+                class="nav-link text-sm font-medium transition-colors duration-300 relative text-gray-400 hover:text-white"
+                data-lang="nav.contact">Contact</a>
+            </li>
+          </ul>
+        </nav>
+        <div class="flex items-center space-x-4">
+          <div id="lang-switcher" class="hidden md:flex items-center space-x-3">
+            <button data-lang-btn="en" aria-label="Switch to English" class="lang-btn opacity-100 transition-opacity">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-auto" viewBox="0 0 7410 3900">
+                <path fill="#b22234" d="M0 0h7410v3900H0z" />
+                <path d="M0 450h7410M0 1200h7410M0 1950h7410M0 2700h7410M0 3450h7410" stroke="#fff"
+                  stroke-width="300" />
+                <path fill="#3c3b6e" d="M0 0h2964v2100H0z" />
+                <path d="m1482 1050 951-309-588 783V525l-588 783z" fill="#fff" />
+              </svg>
+            </button>
+            <button data-lang-btn="ja" aria-label="Switch to Japanese" class="lang-btn opacity-50 transition-opacity">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-auto" viewBox="0 0 900 600">
+                <path fill="#fff" d="M0 0h900v600H0z" />
+                <circle cx="450" cy="300" r="180" fill="#bc002d" />
+              </svg>
+            </button>
+          </div>
+          <div class="md:hidden">
+            <button aria-label="Open menu">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="flex-grow flex items-center py-16">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 w-full">
+
+          <!-- Services Column -->
+          <div class="lg:col-span-4 hidden lg:flex items-center">
+            <div class="relative w-full">
+              <div class="absolute left-4 h-full border-l border-gray-500/30"></div>
+              <div class="space-y-6" id="services-list">
+
+                <div class="service-item relative cursor-pointer" data-service-id="frontend">
+                  <div class="flex items-center space-x-6">
+                    <div class="indicator absolute left-[15px] top-1/2 -translate-y-1/2 h-10 w-0.5 bg-yellow-400 z-10">
+                    </div>
+                    <p class="number pl-4 text-gray-400 font-mono">/01</p>
+                    <h3 class="title text-white text-xl font-semibold" data-lang="services.frontend.title">Frontend
+                      Mastery</h3>
+                  </div>
+                </div>
+
+                <div class="service-item relative cursor-pointer" data-service-id="uiux">
+                  <div class="flex items-center space-x-6 pl-16">
+                    <div class="indicator absolute left-[15px] top-1/2 -translate-y-1/2 h-10 w-0.5 z-10"></div>
+                    <p class="number pl-4 text-gray-400 font-mono hidden">/02</p>
+                    <h3 class="title text-gray-500 text-lg" data-lang="services.uiux.title">UI/UX Design</h3>
+                  </div>
+                </div>
+
+                <div class="service-item relative cursor-pointer" data-service-id="fullstack">
+                  <div class="flex items-center space-x-6 pl-16">
+                    <div class="indicator absolute left-[15px] top-1/2 -translate-y-1/2 h-10 w-0.5 z-10"></div>
+                    <p class="number pl-4 text-gray-400 font-mono hidden">/03</p>
+                    <h3 class="title text-gray-500 text-lg" data-lang="services.fullstack.title">Full-Stack Solutions
+                    </h3>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Column -->
+          <div class="lg:col-span-8 flex items-center">
+            <div class="text-left">
+              <h1 id="hero-headline" class="text-5xl sm:text-6xl md:text-6xl font-semibold text-white leading-none">
+                Mohamad Malik
+              </h1>
+              <h2 id="hero-subheadline" class="text-2xl md:text-3xl text-gray-400 mt-4 font-medium">
+                Frontend Developer
+              </h2>
+              <p id="hero-description" class="mt-8 max-w-lg text-lg text-gray-400 leading-relaxed">
+                Introducing a collection of dynamic, responsive, and intuitive user interfaces, designed specifically
+                for the <span class="text-gray-300 border-b border-gray-500/50 pb-0.5" data-lang="hero.span1">modern web
+                  user</span> and a <span class="text-gray-300 border-b border-gray-500/50 pb-0.5"
+                  data-lang="hero.span2">seamless digital experience</span>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="py-6 border-t border-gray-500/30">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 items-start">
+
+          <!-- Featured Projects Column -->
+          <div class="lg:col-span-2">
+            <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-6" data-lang="projects.featured">
+              Featured Projects
+            </h3>
+            <div class="h-28">
+              <p id="project-title" class="text-lg text-gray-300 mb-2"></p>
+              <h4 id="project-tech" class="text-2xl font-bold text-white mb-2"></h4>
+              <p id="project-period" class="text-md text-gray-500"></p>
+            </div>
+            <div class="flex space-x-2 mt-4" id="project-dots">
+              <!-- Dots will be generated by JS -->
+            </div>
+          </div>
+
+          <!-- About Me Column -->
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-6" data-lang="about.title">
+              About Me
+            </h3>
+            <div class="flex items-start space-x-4">
+              <img src="/src/img/profil.jpg" alt="Mohamad Malik"
+                class="w-20 h-20 rounded-md object-cover flex-shrink-0 mt-1" />
+              <div>
+                <p class="text-gray-400 mb-3 leading-relaxed" data-lang="about.description">
+                  A fresh take on digital craftsmanship, I build robust and beautiful web applications just in time for
+                  your next big idea. Available for new projects.
+                </p>
+                <a href="#" class="font-semibold text-yellow-400 hover:text-yellow-300 transition-colors"
+                  data-lang="about.readMore">
+                  Read More
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </footer>
+    </div>
+  </div>
+  <script src="./index.js" type="module"></script>
+  <script type="module" src="/index.tsx"></script>
 </body>
 
 </html>
