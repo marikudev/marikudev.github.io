@@ -1,244 +1,239 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<!--
+  ================================================================
+  MALIK — Website Portofolio · index.html
+  Dibangun 100% dengan Vanilla HTML, CSS, dan JavaScript:
+  tanpa framework, tanpa library, tanpa build tool.
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/png" href="/src/img/favicon.png" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>マリク</title>
+  Situs ini terdiri dari TIGA berkas yang harus selalu berada
+  di folder yang sama:
+    index.html — struktur & konten halaman (berkas ini)
+    style.css  — semua aturan tampilan
+    script.js  — semua perilaku / logika
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
-    rel="stylesheet">
-  <link href="/src/output.css" rel="stylesheet">
+  PETA BERKAS INI (baca dari atas ke bawah):
+    1. Head → metadata, font, dan tautan ke style.css.
+    2. Body → markup HTML semantik: header (kolom kiri berisi
+       nama, navigasi, carousel artikel, logo tech
+       stack mobile), main (kolom kanan berisi carousel proyek,
+       About, Experience, Projects, footer).
+    3. Akhir body → tautan ke script.js, sengaja dimuat paling
+       akhir supaya seluruh elemen HTML sudah siap saat
+       JavaScript berjalan.
 
-  <style>
-    .nav-link.active {
-      color: white;
-    }
+  Prinsip clean code yang dipakai: satu fungsi = satu tugas,
+  nama variabel/fungsi menjelaskan isinya, tidak ada kode mati,
+  dan semua warna terpusat sebagai CSS custom property di :root
+  (lihat style.css).
+  ================================================================
+-->
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="description" content="MALIKはWebエンジニアです。ユーザーが触れるインターフェースから、その裏側のシステムまで、Web体験をエンドツーエンドで構築します。バニラHTML、CSS、JavaScriptで再構築したポートフォリオ。" />
+    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    <link rel="apple-touch-icon" href="assets/favicon.png" />
+    <title>MALIK — Webエンジニア</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Filter SVG untuk refraksi Liquid Glass: memburamkan backdrop
+         lalu menggesernya tipis (feDisplacementMap) seperti pembiasan
+         di tepi kaca. Dirujuk oleh backdrop-filter pada .card:hover. -->
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false">
+      <defs>
+        <filter id="liquid-glass" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="2" seed="8" result="noise" />
+          <feGaussianBlur in="SourceGraphic" stdDeviation="14" result="blurred" />
+          <feDisplacementMap in="blurred" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </defs>
+    </svg>
+    <div class="bg-photo" aria-hidden="true"></div>
+    <div class="spotlight" id="spotlight" aria-hidden="true"></div>
+    <a class="skip-link" href="#content" data-i18n="skip">コンテンツへスキップ</a>
 
-    .nav-link.active::after {
-      content: '';
-      position: absolute;
-      bottom: -0.5rem;
-      left: 0;
-      display: block;
-      height: 2px;
-      width: 100%;
-      background-color: #facc15;
-      /* yellow-400 */
-      margin-top: 0.25rem;
-      border-radius: 9999px;
-      animation: slide-in 0.3s ease-out;
-    }
+    <!-- Toggle bahasa (desktop/tablet): fixed di ujung kanan atas.
+         Labelnya selalu nama bahasa tujuan: tampilan Jepang →
+         "English", tampilan Inggris → "日本語". -->
+    <button class="lang-toggle lang-toggle--fixed" id="lang-toggle-fixed" type="button" aria-label="Switch to English"><span class="lang-toggle-text">English</span></button>
 
-    @keyframes slide-in {
-      from {
-        width: 0;
-      }
-
-      to {
-        width: 100%;
-      }
-    }
-
-    /* Typewriter effect styles */
-    #hero-subheadline.typing::after {
-      content: '|';
-      color: #facc15;
-      /* yellow-400 */
-      animation: blink-caret 1s step-end infinite;
-    }
-
-    @keyframes blink-caret {
-
-      from,
-      to {
-        opacity: 1;
-      }
-
-      50% {
-        opacity: 0;
-      }
-    }
-  </style>
-  <link rel="stylesheet" href="/index.css">
-</head>
-
-<body class="bg-[#121212]">
-  <div class="bg-[#121212] text-gray-300 min-h-screen font-sans bg-cover bg-center bg-fixed"
-    style="background-image: url('/src/img/bg.png');">
-    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-50"></div>
-
-    <div class="relative z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col min-h-screen">
-
-      <!-- Header -->
-      <header class="py-6 flex justify-between items-center">
+    <div class="layout" id="home">
+      <!-- ================= Kolom kiri ================= -->
+      <header class="site-header">
+        <button class="burger-btn" id="burger-btn" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="ナビゲーションメニューを開く">
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+        </button>
         <div>
-          <h1 class="text-2xl font-bold tracking-wider text-white">mariku.dev</h1>
-        </div>
-        <nav class="hidden md:flex items-center space-x-10">
-          <ul class="flex items-center space-x-10" id="nav-links">
-            <li>
-              <a href="#"
-                class="nav-link text-sm font-medium transition-colors duration-300 relative text-gray-400 hover:text-white active"
-                data-lang="nav.home">Home</a>
-            </li>
-            <li>
-              <a href="#"
-                class="nav-link text-sm font-medium transition-colors duration-300 relative text-gray-400 hover:text-white"
-                data-lang="nav.projects">Projects</a>
-            </li>
-            <li>
-              <a href="#"
-                class="nav-link text-sm font-medium transition-colors duration-300 relative text-gray-400 hover:text-white"
-                data-lang="nav.about">About</a>
-            </li>
-            <li>
-              <a href="#"
-                class="nav-link text-sm font-medium transition-colors duration-300 relative text-gray-400 hover:text-white"
-                data-lang="nav.contact">Contact</a>
-            </li>
+          <h1><a href="#">MALIK</a></h1>
+          <h2 data-i18n="role">Webエンジニア</h2>
+          <p class="tagline" data-i18n="tagline">ユーザーが触れるインターフェースから、その裏側のシステムまで、Web体験をエンドツーエンドで構築します。</p>
+
+          <!-- Logo tech stack (khusus mobile): tepat di bawah
+               tagline di bagian Home. Di desktop/tablet landscape
+               deretan yang sama tampil di bawah baris kontrol
+               carousel hero, jadi versi header ini disembunyikan
+               lewat CSS pada ukuran tersebut. -->
+          <ul class="tech-stack tech-stack--header" aria-label="使用技術" data-i18n-aria="techStack">
+            <!-- Logo Go, Svelte, TanStack, dan Django disembunyikan
+                 sementara (belum dipelajari): kodenya tetap di sini
+                 dalam comment pada posisi aslinya — hapus tanda
+                 comment-nya untuk menampilkan logo itu lagi. -->
+            <li><img src="https://cdn.simpleicons.org/javascript/000000" alt="JavaScript" width="22" height="22" /></li>
+            <li><img src="https://cdn.simpleicons.org/python/000000" alt="Python" width="22" height="22" /></li>
+            <!-- <li><img class="tech-go" src="https://cdn.simpleicons.org/go/000000" alt="Go" width="22" height="22" /></li> -->
+            <li><img src="https://cdn.simpleicons.org/tailwindcss/000000" alt="Tailwind CSS" width="22" height="22" /></li>
+            <!-- <li><img src="https://cdn.simpleicons.org/svelte/000000" alt="Svelte" width="22" height="22" /></li> -->
+            <li><img src="https://cdn.simpleicons.org/react/000000" alt="React" width="22" height="22" /></li>
+            <!-- <li><img src="https://cdn.simpleicons.org/tanstack/000000" alt="TanStack" width="22" height="22" /></li> -->
+            <li><img src="https://cdn.simpleicons.org/nextdotjs/000000" alt="Next.js" width="22" height="22" /></li>
+            <li><img src="https://cdn.simpleicons.org/rubyonrails/000000" alt="Ruby on Rails" width="22" height="22" /></li>
+            <!-- <li><img src="https://cdn.simpleicons.org/django/000000" alt="Django" width="22" height="22" /></li> -->
+            <li><img src="https://cdn.simpleicons.org/express/000000" alt="Express.js" width="22" height="22" /></li>
           </ul>
-        </nav>
-        <div class="flex items-center space-x-4">
-          <div id="lang-switcher" class="hidden md:flex items-center space-x-3">
-            <button data-lang-btn="en" aria-label="Switch to English" class="lang-btn opacity-100 transition-opacity">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-auto" viewBox="0 0 7410 3900">
-                <path fill="#b22234" d="M0 0h7410v3900H0z" />
-                <path d="M0 450h7410M0 1200h7410M0 1950h7410M0 2700h7410M0 3450h7410" stroke="#fff"
-                  stroke-width="300" />
-                <path fill="#3c3b6e" d="M0 0h2964v2100H0z" />
-                <path d="m1482 1050 951-309-588 783V525l-588 783z" fill="#fff" />
-              </svg>
-            </button>
-            <button data-lang-btn="ja" aria-label="Switch to Japanese" class="lang-btn opacity-50 transition-opacity">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-auto" viewBox="0 0 900 600">
-                <path fill="#fff" d="M0 0h900v600H0z" />
-                <circle cx="450" cy="300" r="180" fill="#bc002d" />
-              </svg>
-            </button>
+
+          <nav class="main-nav" id="main-nav" aria-label="ページ内リンク" data-i18n-aria="navLabel">
+            <ul>
+              <li class="nav-item-home"><a class="nav-link" data-nav="home" href="#home"><span class="nav-indicator"></span><span class="nav-text" data-i18n="navHome">ホーム</span></a></li>
+              <li><a class="nav-link" data-nav="about" href="#about"><span class="nav-indicator"></span><span class="nav-text" data-i18n="navAbout">自己紹介</span></a></li>
+              <li><a class="nav-link" data-nav="experience" href="#experience"><span class="nav-indicator"></span><span class="nav-text" data-i18n="navExperience">職務経歴</span></a></li>
+              <li><a class="nav-link" data-nav="projects" href="#projects"><span class="nav-indicator"></span><span class="nav-text" data-i18n="navProjects">プロジェクト</span></a></li>
+            </ul>
+            <!-- Toggle bahasa (mobile): di dalam kotak navbar,
+                 pojok kanan atas panel; ikut melayang bersama
+                 panel saat menu dibuka. -->
+            <button class="lang-toggle lang-toggle--panel" id="lang-toggle-panel" type="button" aria-label="Switch to English"><span class="lang-toggle-text">English</span></button>
+          </nav>
+        </div>
+
+        <!-- Carousel artikel Zenn: di kiri paling bawah (desktop) -->
+        <div class="featured" id="featured">
+          <p class="featured-label"><img src="https://cdn.simpleicons.org/zenn/000000" alt="" width="15" height="15" /> <span data-i18n="zennLabel">Zennの記事</span></p>
+          <!-- Efek Liquid Glass hanya pada panel isi ini (judul +
+               pill kategori); label dan titik navigasi di luarnya. -->
+          <div class="featured-panel">
+            <div class="slides" id="slides" role="region" aria-roledescription="carousel" aria-label="Zennの最新記事3件" data-i18n-aria="articlesRegion"></div>
           </div>
-          <div class="md:hidden">
-            <button aria-label="Open menu">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-              </svg>
-            </button>
-          </div>
+          <div class="dots" id="dots" role="tablist" aria-label="記事を選択" data-i18n-aria="chooseArticle"></div>
+          <p class="sr-only" aria-live="polite" id="liveInfo"></p>
         </div>
       </header>
 
-      <!-- Main Content -->
-      <main class="flex-grow flex items-center py-16">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 w-full">
-
-          <!-- Services Column -->
-          <div class="lg:col-span-4 hidden lg:flex items-center">
-            <div class="relative w-full">
-              <div class="absolute left-4 h-full border-l border-gray-500/30"></div>
-              <div class="space-y-6" id="services-list">
-
-                <div class="service-item relative cursor-pointer" data-service-id="frontend">
-                  <div class="flex items-center space-x-6">
-                    <div class="indicator absolute left-[15px] top-1/2 -translate-y-1/2 h-10 w-0.5 bg-yellow-400 z-10">
-                    </div>
-                    <p class="number pl-4 text-gray-400 font-mono">/01</p>
-                    <h3 class="title text-white text-xl font-semibold" data-lang="services.frontend.title">Frontend
-                      Mastery</h3>
-                  </div>
-                </div>
-
-                <div class="service-item relative cursor-pointer" data-service-id="uiux">
-                  <div class="flex items-center space-x-6 pl-16">
-                    <div class="indicator absolute left-[15px] top-1/2 -translate-y-1/2 h-10 w-0.5 z-10"></div>
-                    <p class="number pl-4 text-gray-400 font-mono hidden">/02</p>
-                    <h3 class="title text-gray-500 text-lg" data-lang="services.uiux.title">UI/UX Design</h3>
-                  </div>
-                </div>
-
-                <div class="service-item relative cursor-pointer" data-service-id="fullstack">
-                  <div class="flex items-center space-x-6 pl-16">
-                    <div class="indicator absolute left-[15px] top-1/2 -translate-y-1/2 h-10 w-0.5 z-10"></div>
-                    <p class="number pl-4 text-gray-400 font-mono hidden">/03</p>
-                    <h3 class="title text-gray-500 text-lg" data-lang="services.fullstack.title">Full-Stack Solutions
-                    </h3>
-                  </div>
-                </div>
-
-              </div>
+      <!-- ================= Kolom kanan ================= -->
+      <main class="content" id="content">
+        <!-- Carousel proyek unggulan: kartu besar + kecil, autoplay 2 detik.
+             Klik kartu untuk lompat ke kartu proyek yang sesuai
+             di bagian Projects. -->
+        <div class="showcase" id="showcase">
+          <div class="pc-stage">
+            <div class="pc-deck" id="pc-deck" tabindex="0" role="region" aria-roledescription="carousel" aria-label="主なプロジェクトのカルーセル。カードをクリックすると、そのプロジェクトのカードへ移動します。左右の矢印キーでも操作できます。" data-i18n-aria="deckLabel">
+              <div class="pc-cards" id="pc-cards"></div>
             </div>
+            <div class="pc-dots" id="pc-dots" role="tablist" aria-label="プロジェクトを選択" data-i18n-aria="chooseProject"></div>
           </div>
-
-          <!-- Hero Column -->
-          <div class="lg:col-span-8 flex items-center">
-            <div class="text-left">
-              <h1 id="hero-headline" class="text-5xl sm:text-6xl md:text-6xl font-semibold text-white leading-none">
-                Mohamad Malik
-              </h1>
-              <h2 id="hero-subheadline" class="text-2xl md:text-3xl text-gray-400 mt-4 font-medium">
-                Frontend Developer
-              </h2>
-              <p id="hero-description" class="mt-8 max-w-lg text-lg text-gray-400 leading-relaxed">
-                Introducing a collection of dynamic, responsive, and intuitive user interfaces, designed specifically
-                for the <span class="text-gray-300 border-b border-gray-500/50 pb-0.5" data-lang="hero.span1">modern web
-                  user</span> and a <span class="text-gray-300 border-b border-gray-500/50 pb-0.5"
-                  data-lang="hero.span2">seamless digital experience</span>.
-              </p>
-            </div>
+          <div class="pc-controls">
+            <button class="pc-arrow" id="pc-prev" type="button" aria-label="前のプロジェクト" data-i18n-aria="prevProject">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+            </button>
+            <button class="pc-arrow" id="pc-next" type="button" aria-label="次のプロジェクト" data-i18n-aria="nextProject">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+            </button>
+            <p class="showcase-label" data-i18n="showcaseLabel">主なプロジェクト</p>
+            <p class="pc-counter" aria-hidden="true"><b id="pc-counter-now">01</b> / 03</p>
           </div>
+          <!-- Logo tech stack (desktop): di bawah baris kontrol
+               carousel dan tulisan "My Projects". -->
+          <ul class="tech-stack tech-stack--hero" aria-label="使用技術" data-i18n-aria="techStack">
+            <!-- Logo Go, Svelte, TanStack, dan Django disembunyikan
+                 sementara (belum dipelajari): kodenya tetap di sini
+                 dalam comment pada posisi aslinya — hapus tanda
+                 comment-nya untuk menampilkan logo itu lagi. -->
+            <li><img src="https://cdn.simpleicons.org/javascript/000000" alt="JavaScript" width="22" height="22" /></li>
+            <li><img src="https://cdn.simpleicons.org/python/000000" alt="Python" width="22" height="22" /></li>
+            <!-- <li><img class="tech-go" src="https://cdn.simpleicons.org/go/000000" alt="Go" width="22" height="22" /></li> -->
+            <li><img src="https://cdn.simpleicons.org/tailwindcss/000000" alt="Tailwind CSS" width="22" height="22" /></li>
+            <!-- <li><img src="https://cdn.simpleicons.org/svelte/000000" alt="Svelte" width="22" height="22" /></li> -->
+            <li><img src="https://cdn.simpleicons.org/react/000000" alt="React" width="22" height="22" /></li>
+            <!-- <li><img src="https://cdn.simpleicons.org/tanstack/000000" alt="TanStack" width="22" height="22" /></li> -->
+            <li><img src="https://cdn.simpleicons.org/nextdotjs/000000" alt="Next.js" width="22" height="22" /></li>
+            <li><img src="https://cdn.simpleicons.org/rubyonrails/000000" alt="Ruby on Rails" width="22" height="22" /></li>
+            <!-- <li><img src="https://cdn.simpleicons.org/django/000000" alt="Django" width="22" height="22" /></li> -->
+            <li><img src="https://cdn.simpleicons.org/express/000000" alt="Express.js" width="22" height="22" /></li>
+          </ul>
+          <p class="sr-only" aria-live="polite" id="pc-live"></p>
         </div>
+
+        <section id="about" aria-label="自己紹介" data-i18n-aria="aboutLabel">
+          <h2 class="section-title" data-i18n="aboutTitle">自己紹介</h2>
+          <div class="about-text">
+            <p data-i18n="aboutP1">
+              接客業からWebエンジニアリングへキャリアチェンジしました。現場でお客様と直接向き合う中で、人が本当に必要としているものを理解する力を身につけました。その経験が、今の私のプロダクトづくりの土台になっています。
+            </p>
+            <p data-i18n="aboutP2">
+              フロントエンドからバックエンドまで、画面の向こうにいる人の気持ちを想像しながら設計・実装しています。ユーザーの視点を決して見失わないWebエンジニアであり続けたいと思っています。
+            </p>
+          </div>
+        </section>
+
+        <section id="experience" aria-label="職務経歴" data-i18n-aria="experienceLabel">
+          <h2 class="section-title" data-i18n="experienceTitle">職務経歴</h2>
+          <ol class="card-list" id="experience-list"></ol>
+          <!-- Tautan résumé mengarah ke profil GitHub Malik;
+               ganti dengan URL file résumé (PDF) milikmu bila sudah ada. -->
+          <a class="text-link" href="https://github.com/marikudev" target="_blank" rel="noreferrer">
+            <span data-i18n="resume">履歴書を見る</span>
+            <svg class="arrow-icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </a>
+        </section>
+
+        <section id="projects" aria-label="プロジェクト" data-i18n-aria="projectsLabel">
+          <h2 class="section-title" data-i18n="projectsTitle">プロジェクト</h2>
+          <ul class="card-list" id="project-list"></ul>
+          <!-- Arsip proyek = daftar repositori GitHub Malik. -->
+          <a class="text-link" href="https://github.com/marikudev?tab=repositories" target="_blank" rel="noreferrer">
+            <span data-i18n="archive">プロジェクトアーカイブを見る</span>
+            <svg class="arrow-icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </a>
+        </section>
+
+        <footer class="site-footer">
+          <p class="footer-copy" data-i18n="footer">&copy; 2026 Malik. スキルを磨き、プロジェクトを届ける。</p>
+          <ul class="social-list footer-icons" aria-label="SNSと連絡先" data-i18n-aria="socialLabel">
+            <li>
+              <a href="https://github.com/marikudev" target="_blank" rel="noreferrer" aria-label="GitHub (opens in a new tab)">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              </a>
+            </li>
+            <li>
+              <a href="https://x.com/" target="_blank" rel="noreferrer" aria-label="X (opens in a new tab)">
+                <svg class="fill-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.451-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></svg>
+              </a>
+            </li>
+            <li>
+              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=malik.learnfile@gmail.com" target="_blank" rel="noreferrer" aria-label="Email Malik (opens Gmail in a new tab)">
+                <svg class="contact-icon-mail" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </a>
+            </li>
+            <li>
+              <a href="https://line.me/" target="_blank" rel="noreferrer" aria-label="LINE (opens in a new tab)">
+                <img class="contact-icon" src="https://cdn.simpleicons.org/line/000000" alt="" width="22" height="22" />
+              </a>
+            </li>
+          </ul>
+        </footer>
       </main>
-
-      <!-- Footer -->
-      <footer class="py-6 border-t border-gray-500/30">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 items-start">
-
-          <!-- Featured Projects Column -->
-          <div class="lg:col-span-2">
-            <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-6" data-lang="projects.featured">
-              Featured Projects
-            </h3>
-            <div class="h-28">
-              <p id="project-title" class="text-lg text-gray-300 mb-2"></p>
-              <h4 id="project-tech" class="text-2xl font-bold text-white mb-2"></h4>
-              <p id="project-period" class="text-md text-gray-500"></p>
-            </div>
-            <div class="flex space-x-2 mt-4" id="project-dots">
-              <!-- Dots will be generated by JS -->
-            </div>
-          </div>
-
-          <!-- About Me Column -->
-          <div>
-            <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-6" data-lang="about.title">
-              About Me
-            </h3>
-            <div class="flex items-start space-x-4">
-              <img src="/src/img/profil.jpg" alt="Mohamad Malik"
-                class="w-20 h-20 rounded-md object-cover flex-shrink-0 mt-1" />
-              <div>
-                <p class="text-gray-400 mb-3 leading-relaxed" data-lang="about.description">
-                  A fresh take on digital craftsmanship, I build robust and beautiful web applications just in time for
-                  your next big idea. Available for new projects.
-                </p>
-                <a href="#" class="font-semibold text-yellow-400 hover:text-yellow-300 transition-colors"
-                  data-lang="about.readMore">
-                  Read More
-                </a>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </footer>
     </div>
-  </div>
-  <script src="./index.js" type="module"></script>
-  <script type="module" src="/index.tsx"></script>
-</body>
 
+    <!-- Perilaku situs dimuat dari berkas script.js (semua logika
+         ada di sana). Sengaja diletakkan paling akhir: elemen HTML
+         di atas harus selesai dibaca browser lebih dulu. -->
+    <script src="script.js"></script>
+  </body>
 </html>

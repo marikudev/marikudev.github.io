@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="BOJ Data Explorer project cover">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1c1c1c"/>
+      <stop offset="1" stop-color="#0d0d0d"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.04"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <circle cx="710" cy="440" r="140" fill="#ffffff" opacity="0.04"/>
+  <circle cx="60" cy="60" r="110" fill="#ffffff" opacity="0.03"/>
+
+  <!-- Motif: panel kaca berisi grafik garis deret waktu (tanpa tulisan;
+       judul proyek tampil sebagai teks HTML di atas gambar) -->
+  <g transform="translate(0 82)">
+  <rect x="70" y="70" width="660" height="190" rx="16" fill="url(#glass)" stroke="#ffffff" stroke-opacity="0.25"/>
+  <g stroke="#ffffff" stroke-opacity="0.12">
+    <line x1="110" y1="120" x2="690" y2="120"/>
+    <line x1="110" y1="165" x2="690" y2="165"/>
+    <line x1="110" y1="210" x2="690" y2="210"/>
+  </g>
+  <polyline points="110,205 200,178 290,190 380,140 470,152 560,104 650,118 690,92"
+            fill="none" stroke="#f5f5f5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="#f5f5f5">
+    <circle cx="380" cy="140" r="6"/>
+    <circle cx="560" cy="104" r="6"/>
+    <circle cx="690" cy="92" r="6"/>
+  </g>
+  <line x1="110" y1="232" x2="690" y2="232" stroke="#ffffff" stroke-opacity="0.3"/>
+  </g>
+</svg>

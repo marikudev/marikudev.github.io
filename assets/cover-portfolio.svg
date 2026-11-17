@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="MALIK Portfolio project cover">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1c1c1c"/>
+      <stop offset="1" stop-color="#0d0d0d"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.04"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <circle cx="700" cy="80" r="140" fill="#ffffff" opacity="0.04"/>
+  <circle cx="80" cy="430" r="110" fill="#ffffff" opacity="0.03"/>
+
+  <!-- Motif: maket dua kolom situs (kolom kiri tetap + konten kanan) (tanpa tulisan;
+       judul proyek tampil sebagai teks HTML di atas gambar) -->
+  <g transform="translate(0 82)">
+  <rect x="70" y="70" width="660" height="190" rx="16" fill="url(#glass)" stroke="#ffffff" stroke-opacity="0.25"/>
+  <rect x="96" y="96" width="180" height="138" rx="10" fill="#ffffff" opacity="0.06"/>
+  <rect x="114" y="116" width="90" height="13" rx="6" fill="#e5e5e5" opacity="0.8"/>
+  <rect x="114" y="146" width="130" height="8" rx="4" fill="#a3a3a3" opacity="0.6"/>
+  <rect x="114" y="166" width="110" height="8" rx="4" fill="#a3a3a3" opacity="0.45"/>
+  <rect x="114" y="196" width="64" height="8" rx="4" fill="#a3a3a3" opacity="0.6"/>
+  <rect x="114" y="216" width="64" height="8" rx="4" fill="#a3a3a3" opacity="0.35"/>
+  <rect x="300" y="96" width="404" height="62" rx="10" fill="#ffffff" opacity="0.06"/>
+  <rect x="300" y="172" width="404" height="62" rx="10" fill="#ffffff" opacity="0.06"/>
+  <rect x="318" y="112" width="170" height="9" rx="4" fill="#e5e5e5" opacity="0.55"/>
+  <rect x="318" y="133" width="300" height="8" rx="4" fill="#a3a3a3" opacity="0.4"/>
+  <rect x="318" y="188" width="170" height="9" rx="4" fill="#e5e5e5" opacity="0.55"/>
+  <rect x="318" y="209" width="300" height="8" rx="4" fill="#a3a3a3" opacity="0.4"/>
+  </g>
+</svg>

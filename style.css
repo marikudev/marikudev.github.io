@@ -1,0 +1,1457 @@
+/* ============================================================
+   MALIK — Portfolio (vanilla) · style.css
+   ------------------------------------------------------------
+   Berkas ini berisi SEMUA aturan tampilan situs: warna, tata
+   letak, kartu, carousel, sampai ukuran huruf di tiap layar.
+   index.html hanya berisi struktur konten, dan script.js
+   hanya berisi perilaku — tampilan diatur dari sini saja.
+
+   Cara membaca berkas ini (urut dari atas ke bawah):
+     1. Design token — variabel warna di :root (satu-satunya
+        tempat warna didefinisikan; penjelasannya di blok
+        komentar DESIGN TOKEN tepat di bawah header ini).
+     2. Gaya dasar — reset ringkas, body, latar foto hutan,
+        spotlight yang mengikuti kursor.
+     3. Kolom kiri — header, navigasi, toggle bahasa, ikon
+        sosial, carousel artikel Zenn, logo tech stack.
+     4. Kolom kanan — About, kartu Experience / Projects,
+        tautan resume & arsip, footer.
+     5. Media query — penyesuaian tablet & desktop (tata letak
+        dua kolom) dan skala tampilan di layar besar.
+   Setiap bagian diawali komentar pembatas, dan aturan yang
+   tidak biasa diberi komentar alasan di dekatnya.
+   ============================================================ */
+
+/* ==========================================================
+   DESIGN TOKEN — semua warna situs didefinisikan SATU KALI
+   di sini sebagai CSS custom property (variabel CSS).
+   Aturan di bawah tidak menulis kode warna langsung,
+   melainkan memanggil var(--nama-token). Keuntungannya:
+   mengganti tema cukup mengubah nilai di blok ini saja.
+   Penamaan token bersifat semantik (berdasarkan PERAN,
+   bukan nama warnanya) — inilah praktik clean code:
+     --color-bg          → latar utama halaman (hitam)
+     --color-surface     → permukaan kartu (abu sangat gelap)
+     --color-text-strong → teks paling terang (judul)
+     --color-text        → teks terang kedua
+     --color-text-body   → teks isi / paragraf
+     --color-text-muted  → teks redup (tanggal, keterangan)
+     --color-text-faint  → teks/indikator paling redup
+     --color-accent      → aksen utama (putih terang)
+     --color-accent-soft → aksen versi transparan (pill)
+     --spot-x / --spot-y → posisi spotlight kursor,
+                           ditulis oleh JavaScript saat runtime
+   ========================================================== */
+:root {
+  --color-bg: #000000;
+  --color-surface: #161616;
+  --color-text-strong: #e5e5e5;
+  --color-text: #d4d4d4;
+  --color-text-body: #a3a3a3;
+  --color-text-muted: #737373;
+  --color-text-faint: #525252;
+  --color-accent: #ffffff;
+  --color-accent-soft: rgba(255, 255, 255, 0.12);
+  --spot-x: 50%;
+  --spot-y: 50%;
+}
+
+/* ---------- Reset ringkas & gaya dasar elemen ---------- */
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text-body);
+  font-family: "Inter", "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", ui-sans-system, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.625;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Foto latar hutan berkabut (tetap diam saat halaman di-scroll).
+   Lapisan gelap tipis di atasnya menjaga teks tetap terbaca. */
+.bg-photo {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.62)),
+    url("assets/bg-forest.jpg") center / cover no-repeat;
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: #000000;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+p { margin: 0; }
+
+img { display: block; max-width: 100%; }
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Spotlight mengikuti kursor ---------- */
+.spotlight {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  background: radial-gradient(
+    600px circle at var(--spot-x) var(--spot-y),
+    rgba(255, 255, 255, 0.07),
+    transparent 80%
+  );
+}
+
+/* ---------- Skip link ---------- */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 16px;
+  z-index: 100;
+  background: var(--color-accent);
+  color: #000000;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 16px; }
+
+/* ---------- Layout ---------- */
+.layout {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---------- Kolom kiri (header) ---------- */
+.site-header {
+  position: relative;
+  padding: 48px 0;
+}
+
+.site-header h1 {
+  margin: 0;
+  font-size: 38px;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--color-text-strong);
+}
+
+.site-header h2 {
+  margin: 12px 0 0;
+  font-size: 18px;
+  line-height: 1.35;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--color-text-strong);
+}
+
+.tagline {
+  margin-top: 16px;
+  max-width: 320px;
+  /* Selaras dengan ukuran teks konten lain di halaman
+     (deskripsi kartu Experience/Projects dan teks About
+     memakai ukuran yang sama). Skala keseluruhan halaman
+     diperbesar lagi di blok "SKALA TAMPILAN" di bawah —
+     di layar desktop ukuran-ukuran dasar ini naik
+     proporsional supaya tidak terlihat kecil di monitor
+     penuh seperti saat dibuka dari Muse preview. */
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* ---------- Navigasi ---------- */
+.main-nav { display: none; }
+
+/* Menu Home tampil di semua ukuran layar — mobile maupun
+   desktop/tablet — supaya kedua navigasi selaras:
+   Home / About / Experience / Projects. */
+
+/* ---------- Toggle burger (hanya mobile / di bawah desktop) ----------
+   Muncul di pojok kanan atas header sejajar nama. Tiga garis
+   berubah jadi tanda silang saat menu terbuka. Di desktop
+   (>=1024px) tombol ini disembunyikan karena menu selalu tampil. */
+.burger-btn {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  z-index: 40;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0;
+  background: none;
+  border: 1px solid rgba(163, 163, 163, 0.3);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.25s ease;
+}
+.burger-btn:hover, .burger-btn:focus-visible { border-color: var(--color-accent); }
+.burger-btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+.burger-line {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background-color: var(--color-text-strong);
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+.burger-btn[aria-expanded="true"] .burger-line:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.burger-btn[aria-expanded="true"] .burger-line:nth-child(2) { opacity: 0; }
+.burger-btn[aria-expanded="true"] .burger-line:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+/* Panel menu saat burger dibuka (di bawah 1024px).
+   Tombol burger dan panel menu mengambang (kelas .floating
+   ditambahkan JS) dalam dua keadaan: saat halaman di-scroll
+   melewati header, dan setiap kali menu sedang terbuka —
+   termasuk di bagian HOME / paling atas halaman. Saat
+   mengambang, tombol menempel fixed di pojok kanan atas layar
+   dan panel yang terbuka ikut fixed tepat di bawah tombol,
+   keduanya berlatar Liquid Glass (kaca buram blur + saturate
+   dengan tepi specular, sama seperti efek kaca pada kartu
+   saat di-hover) — bukan hitam pekat — jadi menu bisa dibuka
+   dari posisi scroll mana pun. */
+@media (max-width: 1023.98px) {
+  .site-header h1 { padding-right: 56px; }
+  /* Jangkar untuk toggle bahasa di pojok kanan atas panel */
+  .main-nav { position: relative; }
+  .main-nav.open {
+    display: block;
+    margin-top: 24px;
+    padding: 4px 20px;
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+  }
+  .burger-btn.floating {
+    position: fixed;
+    top: calc(12px + env(safe-area-inset-top, 0px));
+    right: 24px;
+    /* Latar Liquid Glass — permukaan kaca buram
+       semi-transparan dengan tepi specular terang, sama
+       seperti efek kaca pada .card saat di-hover; bukan
+       latar hitam pekat seperti sebelumnya. */
+    background-color: rgba(255, 255, 255, 0.055);
+    -webkit-backdrop-filter: blur(18px) saturate(170%);
+    backdrop-filter: blur(18px) saturate(170%);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.45),
+      inset 1px 0 0 0 rgba(255, 255, 255, 0.12),
+      inset -1px 0 0 0 rgba(255, 255, 255, 0.06),
+      inset 0 -1px 0 0 rgba(255, 255, 255, 0.05),
+      0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+  .main-nav.open.floating {
+    position: fixed;
+    top: calc(68px + env(safe-area-inset-top, 0px));
+    right: 24px;
+    left: 24px;
+    margin-top: 0;
+    z-index: 39;
+    /* Latar Liquid Glass yang sama seperti tombol di atas —
+       blur + saturate dengan tepi specular, bukan hitam. */
+    background-color: rgba(255, 255, 255, 0.055);
+    -webkit-backdrop-filter: blur(18px) saturate(170%);
+    backdrop-filter: blur(18px) saturate(170%);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.45),
+      inset 1px 0 0 0 rgba(255, 255, 255, 0.12),
+      inset -1px 0 0 0 rgba(255, 255, 255, 0.06),
+      inset 0 -1px 0 0 rgba(255, 255, 255, 0.05),
+      0 16px 36px rgba(0, 0, 0, 0.4);
+  }
+  /* Warna font navbar melayang dibuat abu-abu terang: di atas
+     kaca buram yang menerawang ke foto hutan berkabut, teks
+     non-aktif bawaan (--color-text-muted, #737373) dan garis
+     indikatornya (--color-text-faint) menyaru dengan latar. Di panel
+     melayang, teks non-aktif naik ke abu terang #d4d4d4 dan
+     indikatornya ke #a3a3a3; yang aktif / di-hover jadi putih
+     penuh. Bayangan teks tipis menjaga huruf tetap terbaca di
+     bagian kabut yang paling terang. Aturan ini hanya berlaku
+     untuk panel melayang — navigasi desktop tidak berubah. */
+  .main-nav.open.floating .nav-text {
+    color: #d4d4d4;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.55);
+  }
+  .main-nav.open.floating .nav-indicator {
+    background-color: #a3a3a3;
+  }
+  .main-nav.open.floating .nav-link:hover .nav-text,
+  .main-nav.open.floating .nav-link:focus-visible .nav-text,
+  .main-nav.open.floating .nav-link.active .nav-text {
+    color: #ffffff;
+  }
+  .main-nav.open.floating .nav-link:hover .nav-indicator,
+  .main-nav.open.floating .nav-link:focus-visible .nav-indicator,
+  .main-nav.open.floating .nav-link.active .nav-indicator {
+    background-color: #ffffff;
+  }
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  width: max-content;
+}
+
+.nav-indicator {
+  display: block;
+  width: 32px;
+  height: 1px;
+  margin-right: 16px;
+  background-color: var(--color-text-faint);
+  transition: all 0.25s ease;
+}
+
+.nav-text {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  transition: color 0.25s ease;
+}
+
+.nav-link:hover .nav-indicator,
+.nav-link:focus-visible .nav-indicator,
+.nav-link.active .nav-indicator {
+  width: 64px;
+  background-color: var(--color-text-strong);
+}
+
+.nav-link:hover .nav-text,
+.nav-link:focus-visible .nav-text,
+.nav-link.active .nav-text {
+  color: var(--color-text-strong);
+}
+
+/* ---------- Toggle bahasa (Jepang / Inggris) ----------
+   Situs dwibahasa: bahasa utama Jepang, toggle menampilkan
+   nama bahasa TUJUAN — saat tampilan Jepang tombolnya
+   bertuliskan "English", saat tampilan Inggris bertuliskan
+   "日本語". Dua penempatan:
+     .lang-toggle--fixed → desktop/tablet (>=1024px, breakpoint
+                           desktop situs ini): fixed di ujung
+                           kanan atas layar.
+     .lang-toggle--panel → mobile (<1024px): di dalam kotak
+                           navbar (panel menu) pojok kanan
+                           atas, ikut melayang bersama panel
+                           saat menu dibuka.
+   Gayanya mengikuti tombol burger melayang: pil kaca Liquid
+   Glass abu netral di atas latar gelap. */
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  color: var(--color-text);
+  background-color: rgba(255, 255, 255, 0.055);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  backdrop-filter: blur(18px) saturate(170%);
+  border: 1px solid rgba(163, 163, 163, 0.35);
+  border-radius: 999px;
+  padding: 9px 16px;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.35),
+    0 8px 24px rgba(0, 0, 0, 0.3);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.lang-toggle:hover, .lang-toggle:focus-visible { color: #ffffff; border-color: var(--color-accent); }
+.lang-toggle:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+.lang-toggle--fixed {
+  position: fixed;
+  top: 20px;
+  right: 48px;
+  z-index: 60;
+  display: none;
+}
+@media (min-width: 1024px) {
+  .lang-toggle--fixed { display: inline-flex; }
+}
+.lang-toggle--panel {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  z-index: 2;
+}
+@media (min-width: 1024px) {
+  .lang-toggle--panel { display: none; }
+}
+
+/* ---------- Sosial ---------- */
+.social-list {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 0;
+}
+
+.social-list a {
+  display: block;
+  color: var(--color-text-body);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.social-list a:hover,
+.social-list a:focus-visible {
+  color: var(--color-accent);
+}
+
+.social-list svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.social-list svg.fill-icon {
+  fill: currentColor;
+  stroke: none;
+}
+
+/* Logo Zenn dari Simple Icons (berkasnya hitam pekat); filter
+   invert membaliknya jadi abu-abu netral terang supaya terbaca
+   di atas latar gelap dan menyatu dengan ikon sosial lainnya,
+   lalu jadi putih penuh saat hover — sama seperti ikon lain.
+   Ukurannya sedikit lebih kecil dari kotak 20px ikon GitHub/X
+   karena glyph Zenn mengisi bingkainya lebih penuh; 17px
+   membuat ketiganya tampak seragam secara optik. */
+.social-list img.zenn-icon {
+  width: 17px;
+  height: 17px;
+  filter: invert(0.64);
+  /* Dinaikkan sedikit: glyph Zenn duduk lebih rendah di dalam
+     bingkainya dibanding glyph GitHub/X, jadi digeser 2px ke
+     atas supaya ketiganya sejajar secara optik. */
+  transform: translateY(-2px);
+  transition: filter 0.2s ease;
+}
+.social-list a:hover img.zenn-icon,
+.social-list a:focus-visible img.zenn-icon {
+  filter: invert(1);
+}
+
+/* ---------- Carousel artikel terbaru (kiri paling bawah, desktop) ----------
+   Gayanya diselaraskan dengan gaya kartu di halaman ini, bukan
+   meniru artefak carousel terpisah: tanpa garis pemisah di atas,
+   label seperti judul section dengan logo Zenn di depannya,
+   judul bergaya .card-title (panah bergerak saat hover, aksen teal),
+   kategori sebagai pill .tag-list, dan titik navigasi memakai palet warna situs. Transisinya crossfade tumpang-tindih. Hanya
+   tampil di desktop (>=1024px). */
+.featured {
+  display: none;
+  /* Lebar kontainer diperkecil lagi (400px → 340px) mengikuti
+     kotak merah pada screenshot: panel kaca jadi lebih ramping
+     dan semakin jauh dari kolom kanan. */
+  max-width: 340px;
+  margin-top: 32px;
+}
+/* Panel Liquid Glass hanya membungkus isi carousel (judul
+   artikel + pill kategori) — label "Zenn Article" di atasnya
+   dan titik navigasi di bawahnya tetap di luar panel. Efek
+   kaca saat hover ada di blok desktop di bawah, sama seperti
+   .card. Padding dan margin negatif dikurangi supaya tinggi
+   dan lebar pembungkus lebih ringkas / rapat. */
+.featured-panel {
+  position: relative;
+  border-radius: 20px;
+  padding: 12px 14px;
+  margin: 0 -10px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+/* Kilau Liquid Glass yang mengikuti kursor, sama seperti
+   .card::before (posisinya diatur JS lewat --mx / --my). */
+.featured-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(340px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0) 62%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0) 46%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.featured-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-strong);
+}
+/* Logo Zenn kecil di depan label; invert(0.9) menyamakan
+   terangnya dengan teks label (--color-text-strong). */
+.featured-label img {
+  width: 15px;
+  height: 15px;
+  filter: invert(0.9);
+}
+.slides {
+  position: relative;
+  min-height: 84px;
+}
+.slide .tag-list {
+  margin-top: 8px;
+}
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateY(7px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 0.9, 0.28, 1);
+  pointer-events: none;
+}
+.slide.is-active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.slide .judul {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--color-text-strong);
+}
+/* Pill kategori di dalam slide ikut diperkecil supaya sepadan
+   dengan judul topik yang lebih kecil (label "Zenn Article"
+   di atasnya tidak berubah). */
+.slide .tag-list li {
+  font-size: 11px;
+  padding: 3px 10px;
+}
+.slide .judul a { color: inherit; transition: color 0.2s ease; }
+.slide .judul a:hover, .slide .judul a:focus-visible { color: var(--color-accent); }
+.slide .judul a:hover .arrow-icon,
+.slide .judul a:focus-visible .arrow-icon { transform: translate(2px, -2px); }
+.dots {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 6px;
+}
+.dots button {
+  position: relative;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  background: rgba(163, 163, 163, 0.45);
+  transition: background 0.45s ease;
+}
+.dots button:hover { background: var(--color-text); }
+.dots button.active { background: var(--color-accent); }
+.dots button:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+/* Area sentuh lebih besar tanpa mengubah tampilan titik */
+.dots button::after {
+  content: "";
+  position: absolute;
+  inset: -9px;
+}
+
+/* ---------- Carousel proyek unggulan (hero, kolom kanan) ----------
+   Mekanisme sama persis seperti demo Versi 2: tiga kartu selalu ada
+   di deck, perannya ditentukan kelas —
+     .is-active  → kartu besar landscape di kiri
+     .is-next    → kartu kecil landscape di kanan, sejajar tengah
+                   secara vertikal dengan kartu besar
+     .is-hidden  → kartu ketiga menunggu di posisi kartu kecil,
+                   bergeser ke kanan + transparan
+     .is-exiting → kartu besar yang sedang keluar ke kiri
+     .is-entering→ kartu yang masuk dari kiri (saat mundur)
+   Kedua kartu memakai rasio landscape 16:10 — sama seperti rasio
+   asli tangkapan layar proyeknya — supaya pratinjau situs tampil
+   utuh tanpa terpotong seperti saat kartunya portrait.
+   JS hanya mengganti kelas + index; CSS transition yang
+   menganimasikan left / top / width / height / transform / opacity.
+   Autoplay looping 2 detik. Warna, radius, dan tipografi mengikuti
+   situs ini (palet netral hitam-putih, font Inter). Klik kartu = lompat ke
+   kartu proyek yang sesuai di section Projects. */
+/* Carousel proyek hanya tampil di layar desktop dan tablet
+   landscape; di HP dan tablet portrait disembunyikan. */
+.showcase { display: none; margin-bottom: 64px; }
+@media (min-width: 1024px), (min-width: 768px) and (min-height: 500px) and (orientation: landscape) {
+  .showcase { display: block; }
+}
+/* Judul "My Projects" sekarang duduk di baris kontrol,
+   di tengah antara tombol panah dan counter. */
+.showcase-label {
+  margin: 0;
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-strong);
+}
+.pc-stage { display: flex; align-items: center; gap: 14px; }
+.pc-deck {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  aspect-ratio: 16 / 9.5;
+  touch-action: pan-y;
+  cursor: grab;
+  outline-offset: 6px;
+}
+.pc-deck.dragging { cursor: grabbing; }
+.pc-cards {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.32s cubic-bezier(0.22, 0.9, 0.28, 1);
+  will-change: transform;
+}
+.pc-cards.no-anim { transition: none; }
+.pcard {
+  position: absolute;
+  margin: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: var(--color-surface);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+  transition:
+    left 0.72s cubic-bezier(0.22, 0.9, 0.28, 1),
+    top 0.72s cubic-bezier(0.22, 0.9, 0.28, 1),
+    width 0.72s cubic-bezier(0.22, 0.9, 0.28, 1),
+    height 0.72s cubic-bezier(0.22, 0.9, 0.28, 1),
+    transform 0.72s cubic-bezier(0.22, 0.9, 0.28, 1),
+    opacity 0.55s ease;
+  will-change: left, width, height, transform, opacity;
+}
+.pcard.no-anim { transition: none !important; }
+.pcard:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+/* Kartu diperbesar dari ukuran sebelumnya (aktif 64%,
+   kecil 32%): persen lebar dan tinggi kartu aktif dinaikkan
+   bersama-sama (66% / 66%) dan posisinya tetap di tengah
+   deck (top = (100 − 66) / 2 = 17%), jadi rasio lebar :
+   tinggi kartunya TIDAK berubah — hanya skalanya yang naik.
+   Kartu kecil tetap 32% / 32% (rasio sama), hanya digeser
+   ke kanan mengikuti tepi kartu aktif yang membesar
+   (left 65.5% → 67.5% = 66% + celah 1.5%). */
+.pcard.is-active {
+  left: 0; top: 17%; width: 66%; height: 66%;
+  transform: translateX(0) scale(1);
+  opacity: 1; z-index: 3;
+}
+.pcard.is-next {
+  left: 67.5%; top: 34%; width: 32%; height: 32%;
+  transform: translateX(0) scale(1);
+  opacity: 1; z-index: 2;
+}
+.pcard.is-hidden {
+  left: 67.5%; top: 34%; width: 32%; height: 32%;
+  transform: translateX(54px) scale(0.9);
+  opacity: 0; z-index: 1; pointer-events: none;
+}
+.pcard.is-exiting {
+  left: 0; top: 17%; width: 66%; height: 66%;
+  transform: translateX(-58%) scale(0.84);
+  opacity: 0; z-index: 4; pointer-events: none;
+}
+.pcard.is-entering {
+  transform: translateX(-54px) scale(0.85);
+  opacity: 0;
+}
+.pcard img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transform: scale(1.08);
+  transition: transform 1.1s cubic-bezier(0.22, 0.9, 0.28, 1);
+  pointer-events: none;
+}
+.pcard.is-active img { transform: scale(1); }
+.pcard::after {
+  content: "";
+  position: absolute; inset: 0;
+  /* Gradien gelap di bagian bawah kartu supaya caption tetap terbaca. */
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0) 48%);
+  pointer-events: none;
+}
+.pcard-caption {
+  position: absolute;
+  left: 16px; right: 16px; bottom: 14px;
+  z-index: 1;
+}
+.pcard-name {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--color-text-strong);
+}
+/* Caption kartu kecil lebih ringkas */
+.pcard.is-next .pcard-caption, .pcard.is-hidden .pcard-caption { left: 12px; right: 12px; bottom: 11px; }
+.pcard.is-next .pcard-name, .pcard.is-hidden .pcard-name { font-size: 11px; }
+
+/* Titik vertikal di samping deck, seperti Versi 2 */
+.pc-dots {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  flex: none;
+}
+.pc-dots button {
+  position: relative;
+  width: 9px; height: 9px;
+  border-radius: 99px;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  background: rgba(163, 163, 163, 0.4);
+  transition: height 0.45s cubic-bezier(0.22, 0.9, 0.28, 1), background 0.3s ease;
+}
+.pc-dots button:hover { background: var(--color-text); }
+.pc-dots button.active { height: 34px; background: var(--color-accent); }
+.pc-dots button:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+.pc-dots button::after { content: ""; position: absolute; inset: -8px; }
+
+.pc-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  /* Baris kontrol dinaikkan rapat ke tepi bawah deck
+     (margin-top 30px → 10px) mengikuti garis penanda pada
+     screenshot pengguna. Baris kontrol juga digeser 100px ke
+     kanan (margin-left) supaya tombol panah tidak mepet
+     dengan blok Zenn Article di kolom kiri; posisi deck
+     carousel sendiri tidak berubah dan tepi kanan baris
+     (counter) tetap sejajar kolom. */
+  margin-top: 10px;
+  margin-left: 100px;
+}
+.pc-arrow {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  flex: none;
+  border: 1px solid rgba(163, 163, 163, 0.3);
+  background: none;
+  color: var(--color-text);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: border-color 0.25s ease, color 0.25s ease, transform 0.15s ease;
+}
+.pc-arrow:hover, .pc-arrow:focus-visible { border-color: var(--color-accent); color: var(--color-accent); }
+.pc-arrow:active { transform: scale(0.93); }
+.pc-arrow svg {
+  width: 18px; height: 18px;
+  fill: none; stroke: currentColor; stroke-width: 2.2;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.pc-counter {
+  margin: 0;
+  flex: none;
+  font-size: 12.5px;
+  letter-spacing: 0.14em;
+  color: var(--color-text-muted);
+}
+.pc-counter b { color: var(--color-text-strong); font-size: 15px; }
+
+@media (max-width: 480px) {
+  .pcard-name { font-size: 13.5px; }
+  .pcard.is-next .pcard-name, .pcard.is-hidden .pcard-name { font-size: 10.5px; }
+  .pcard-caption { left: 12px; right: 12px; bottom: 11px; }
+}
+
+/* ---------- Logo tech stack ----------
+   Deretan logo teknologi yang dipakai Malik sebagai web engineer
+   engineer. Tampilannya diselaraskan dengan ikon sosial yang
+   sudah ada (GitHub, X, Zenn, email, LINE): berkas logo
+   Simple Icons berwarna hitam pekat diberi filter invert
+   0.64 sehingga menjadi abu-abu netral di atas latar gelap,
+   dan menyala putih penuh saat di-hover — persis perlakuan
+   logo Zenn dan LINE. Dua penempatan:
+     .tech-stack--hero   → desktop, di dalam .showcase tepat
+                           di bawah baris kontrol carousel
+                           (tampil mengikuti .showcase).
+     .tech-stack--header → mobile, di header tepat di bawah
+                           tagline; disembunyikan pada ukuran
+                           layar yang menampilkan .showcase
+                           supaya logonya tidak tampil dobel. */
+.tech-stack {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tech-stack img {
+  height: 25px;
+  width: auto;
+  filter: invert(0.64);
+  transition: filter 0.2s ease;
+}
+/* Koreksi optik khusus logo Go: di dalam berkas SVG-nya,
+   glyph "GO" hanya mengisi ±38% tinggi bingkai 24×24
+   (wordmark lebar dan pendek), sedangkan logo lain mengisi
+   60–100% — jadi pada tinggi bingkai yang sama Go terlihat
+   jauh lebih kecil dari logo lainnya. Bingkai Go diperbesar
+   ±1,85× supaya tinggi glyph-nya (±70% tinggi logo persegi)
+   sejajar secara optik dengan logo lebar lain seperti
+   Tailwind CSS / Express.js. Ukurannya ikut dinaikkan di
+   blok skala tablet dan desktop di bawah. */
+.tech-stack img.tech-go { height: 46px; }
+.tech-stack li:hover img { filter: invert(1); }
+.tech-stack--hero {
+  /* Deretan logo diturunkan ke pita kosong di bawah posisi
+     lamanya (margin-top diperbesar, mengikuti kotak penanda
+     pada screenshot pengguna): logo kini duduk lebih rendah
+     di area hero, sejajar secara vertikal dengan blok Zenn
+     Article di kolom kiri. */
+  margin-top: 60px;
+  /* Deretan logo digeser mepet ke ujung kanan baris: tepi
+     kanan logo terakhir sejajar dengan tepi kanan kolom,
+     sama seperti counter carousel di baris kontrol atasnya. */
+  justify-content: flex-end;
+}
+/* Jarak logo dari tagline di atasnya diperlebar (20px → 36px)
+   supaya deretan logo tidak menempel ke kalimat tagline. */
+.tech-stack--header { margin-top: 36px; }
+@media (min-width: 1024px), (min-width: 768px) and (min-height: 500px) and (orientation: landscape) {
+  .tech-stack--header { display: none; }
+}
+
+/* ---------- Kolom kanan ---------- */
+.content { padding-bottom: 48px; }
+
+section {
+  margin-bottom: 64px;
+  scroll-margin-top: 96px;
+}
+
+.section-title {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin: 0 -24px 16px;
+  padding: 20px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-strong);
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ---------- About ---------- */
+/* Selaras dengan teks konten lainnya, sama seperti
+   .card-desc; skala desktopnya diatur di blok
+   "SKALA TAMPILAN" di bawah. */
+.about-text {
+  font-size: 15px;
+  line-height: 1.55;
+}
+.about-text p { margin-bottom: 16px; }
+.about-text p:last-child { margin-bottom: 0; }
+
+.inline-link {
+  font-weight: 500;
+  color: var(--color-text-strong);
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+.inline-link:hover, .inline-link:focus-visible { color: var(--color-accent); }
+
+/* ---------- Kartu (experience / projects) ---------- */
+.card {
+  position: relative;
+  border-radius: 20px;
+  padding: 20px;
+  margin: 0 -20px 4px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, opacity 0.25s ease, transform 0.3s ease;
+}
+
+/* Kartu proyek adalah target jangkar carousel My Projects
+   (klik kartu carousel melompat ke kartu proyek yang sesuai):
+   beri jarak gulir di atas kartu supaya kartunya tidak
+   tertutup judul section yang sticky di mobile. */
+#project-list .card { scroll-margin-top: 96px; }
+
+/* Lapisan kilau Liquid Glass: pantulan cahaya yang mengikuti
+   kursor di dalam kartu (posisinya diatur JS lewat --mx / --my)
+   plus gloss lembut di separuh atas permukaan kaca. Memudar
+   masuk hanya saat kartu di-hover (aturan hover ada di blok
+   desktop di bawah). */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(340px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0) 62%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0) 46%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.card-date {
+  margin-top: 4px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.card-title {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.4;
+  font-weight: 500;
+  color: var(--color-text-strong);
+}
+
+.card-title a {
+  transition: color 0.2s ease;
+}
+.card-title a:hover, .card-title a:focus-visible { color: var(--color-accent); }
+
+.card-title a::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.arrow-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-left: 4px;
+  vertical-align: -2px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.2s ease;
+}
+.card-title a:hover .arrow-icon,
+.card-title a:focus-visible .arrow-icon,
+.text-link:hover .arrow-icon {
+  transform: translate(2px, -2px);
+}
+
+.prev-roles {
+  margin-top: 2px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--color-text-muted);
+}
+
+.card-desc {
+  margin-top: 8px;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.related-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-top: 8px;
+  position: relative;
+  z-index: 2;
+}
+.related-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+  transition: color 0.2s ease;
+}
+.related-links a:hover, .related-links a:focus-visible { color: var(--color-accent); }
+.related-links svg {
+  width: 14px; height: 14px;
+  fill: none; stroke: currentColor; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+  position: relative;
+  z-index: 2;
+}
+.tag-list li {
+  border-radius: 9999px;
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent);
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+/* Thumbnail proyek */
+.card-thumb { margin-top: 16px; position: relative; z-index: 2; }
+.card-thumb img {
+  width: 200px;
+  border-radius: 20px;
+  border: 2px solid rgba(229, 229, 229, 0.1);
+  transition: border-color 0.25s ease;
+}
+.card:hover .card-thumb img { border-color: rgba(229, 229, 229, 0.3); }
+
+/* ---------- Tautan teks besar (résumé / archive) ---------- */
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 48px;
+  font-weight: 600;
+  color: var(--color-text-strong);
+  transition: color 0.2s ease;
+}
+.text-link:hover, .text-link:focus-visible { color: var(--color-accent); }
+
+.installs-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  position: relative;
+  z-index: 2;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+  transition: color 0.2s ease;
+}
+.installs-link:hover, .installs-link:focus-visible { color: var(--color-accent); }
+.installs-link svg {
+  width: 14px; height: 14px;
+  fill: currentColor;
+}
+
+/* ---------- Footer ---------- */
+/* Baris simpel: teks hak cipta di kiri; di ujung kanan semua
+   ikon tergabung dalam satu kelompok rapat — GitHub, X, Zenn,
+   email, dan LINE — tanpa label "Contact:" lagi. */
+.site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  padding-bottom: 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+/* Teks footer di mobile (di bawah tablet): kalimat Jepangnya
+   kelebihan ±2 karakter dari lebar layar, jadi "る。" turun
+   sendirian ke baris kedua. Menghapus "。" saja hanya menghemat
+   1 karakter (±14px pada 14px) — tidak cukup untuk menarik
+   "る" ikut naik. Karena itu "。" dipertahankan dan teksnya
+   yang disesuaikan: ukurannya diperkecil mengikuti lebar
+   layar dan dilarang membungkus (nowrap), sehingga selalu
+   persis satu baris penuh di semua lebar HP; deretan ikon
+   tetap di baris berikutnya, mepet kanan seperti sebelumnya.
+   Desktop/tablet tidak berubah (tetap 14px). */
+@media (max-width: 767.98px) {
+  .footer-copy {
+    flex: 1 1 100%;
+    white-space: nowrap;
+    font-size: clamp(10px, 3.25vw, 13px);
+    letter-spacing: -0.01em;
+  }
+}
+.footer-icons {
+  gap: 16px;
+  margin-left: auto;
+}
+.footer-icons a { display: block; line-height: 0; }
+/* Ikon LINE dari Simple Icons (berkas hitam pekat):
+   filter invert menjadikannya abu-abu netral seperti ikon
+   sosial di footer, putih penuh saat hover. */
+.footer-icons img.contact-icon {
+  width: 22px;
+  height: 22px;
+  filter: invert(0.64);
+  transition: filter 0.2s ease;
+}
+.footer-icons a:hover img.contact-icon,
+.footer-icons a:focus-visible img.contact-icon {
+  filter: invert(1);
+}
+/* Ikon email: SVG amplop bergaya garis, warnanya mengikuti
+   ikon kontak lain (abu-abu netral, putih saat hover). */
+.footer-icons svg.contact-icon-mail {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  color: var(--color-text-body);
+  transition: color 0.2s ease;
+}
+.footer-icons a:hover svg.contact-icon-mail,
+.footer-icons a:focus-visible svg.contact-icon-mail {
+  color: var(--color-accent);
+}
+
+/* ---------- Tablet ---------- */
+@media (min-width: 768px) {
+  .layout { padding: 0 48px; }
+  .site-header { padding: 80px 0; }
+  .burger-btn { top: 80px; }
+  /* Posisi mengambang mengikuti padding layout 48px di lebar ini */
+  .burger-btn.floating { right: 48px; }
+  .main-nav.open.floating { left: 48px; right: 48px; }
+  .site-header h1 { font-size: 48px; }
+  .site-header h2 { font-size: 20px; }
+  .content { padding-bottom: 80px; }
+  section { margin-bottom: 96px; }
+  .section-title { margin: 0 -48px 16px; padding: 20px 48px; }
+
+  .card {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 16px;
+  }
+  .card-date { grid-column: span 2; margin-bottom: 0; }
+  .card-body { grid-column: span 6; }
+  .card-thumb { grid-column: span 2; order: -1; margin-top: 4px; }
+  .card-thumb img { width: 100%; }
+  .card-body.with-thumb { grid-column: span 6; }
+}
+
+/* ---------- Desktop: dua kolom, kiri sticky ---------- */
+@media (min-width: 1024px) {
+  .layout {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    /* Wadah diperlebar lagi (1440px → 1600px) dan pembagian
+       kolom digeser ke kiri: kolom sticky 45%, kolom konten 55%,
+       supaya tepi kiri konten tertarik ke kiri dan area konten
+       (termasuk carousel hero) jadi lebih lebar. Lebar ini
+       kemudian dinaikkan lagi (1600px → 1740px) supaya deck
+       carousel — yang lebarnya mengikuti kolom konten — ikut
+       membesar di monitor lebar: kedua kartu carousel jadi
+       lebih besar secara absolut tanpa mengubah rasio kartu
+       maupun pembagian kolom 45/55. Di jendela yang lebih
+       sempit dari 1740px wadah tetap memenuhi lebar layar
+       seperti sebelumnya, jadi tidak ada perubahan di sana. */
+    max-width: 1740px;
+    padding: 0 48px;
+  }
+  .site-header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 45%;
+    max-height: 100vh;
+    /* Padding bawah dikurangi (dulu 64px) supaya carousel
+       artikel yang menempel di dasar kolom turun lebih dekat
+       ke tepi bawah layar. */
+    padding: 64px 0 40px;
+  }
+  /* Nav digeser ke atas, lebih dekat ke ikon sosial */
+  .main-nav { display: block; margin-top: 36px; }
+  .burger-btn { display: none; }
+  .featured { display: block; }
+
+  /* Layar laptop yang pendek: rapatkan lagi kolom kiri supaya
+     blok identitas naik dan carousel utuh terlihat di layar */
+  @media (max-height: 820px) {
+    .site-header { padding: 44px 0 28px; }
+    .site-header h1 { font-size: 40px; }
+    .main-nav { margin-top: 18px; }
+    .nav-link { padding: 9px 0; }
+    .featured-label { margin-bottom: 12px; }
+    .slides { min-height: 76px; }
+    .dots { margin-top: 5px; }
+  }
+  .content {
+    width: 55%;
+    padding: 96px 0;
+  }
+  /* Carousel hero diturunkan sedikit dari tepi atas kolom
+     supaya ada napas di atas label "My Projects". */
+  .showcase { margin-top: 36px; margin-bottom: 96px; }
+
+  /* About digeser lebih ke bawah (padding atas ekstra yang
+     mengikuti tinggi layar) supaya tidak ikut muncul di layar
+     hero, dan diberi tinggi minimum hampir satu layar penuh
+     supaya saat tautan nav About diklik, bagian Experience
+     belum ikut terlihat. */
+  #about {
+    padding-top: clamp(64px, 22vh, 220px);
+    min-height: calc(100vh - 200px);
+  }
+  section { margin-bottom: 144px; }
+  section:last-of-type { margin-bottom: 144px; }
+
+  /* Judul section hanya untuk screen reader di desktop */
+  .section-title {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+    background: none;
+    backdrop-filter: none;
+  }
+
+  /* Efek redup kartu lain saat satu kartu di-hover */
+  @media (hover: hover) and (pointer: fine) {
+    .card-list:hover .card { opacity: 0.5; }
+    .card-list:hover .card:hover { opacity: 1; }
+    .card:hover::before, .featured-panel:hover::before, .featured-panel:focus-within::before { opacity: 1; }
+
+    /* Liquid Glass ala Apple/iPhone: permukaan kaca buram
+       semi-transparan (backdrop-filter blur + saturate), tepi
+       specular terang — paling terang di tepi atas — bayangan
+       lembut, dan kartu sedikit terangkat. Kilau yang mengikuti
+       kursor digambar oleh .card::before. Panel isi Zenn
+       Article (.featured-panel) menerima efek yang sama persis
+       saat di-hover (atau saat fokus keyboard ada di dalamnya);
+       label dan titik navigasinya tidak ikut jadi kaca. */
+    .card:hover, .featured-panel:hover, .featured-panel:focus-within {
+      background-color: rgba(255, 255, 255, 0.055);
+      -webkit-backdrop-filter: blur(18px) saturate(170%);
+      backdrop-filter: blur(18px) saturate(170%);
+      box-shadow:
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.45),
+        inset 1px 0 0 0 rgba(255, 255, 255, 0.12),
+        inset -1px 0 0 0 rgba(255, 255, 255, 0.06),
+        inset 0 -1px 0 0 rgba(255, 255, 255, 0.05),
+        0 16px 36px rgba(0, 0, 0, 0.4);
+      transform: translateY(-2px);
+    }
+
+    /* Refraksi tepi kaca via filter SVG (blur + feDisplacementMap)
+       untuk browser yang mendukung backdrop-filter url(); browser
+       lain tetap memakai blur + saturate di atas sebagai fallback. */
+    @supports (backdrop-filter: url("#liquid-glass")) {
+      .card:hover, .featured-panel:hover, .featured-panel:focus-within {
+        -webkit-backdrop-filter: url("#liquid-glass");
+        backdrop-filter: url("#liquid-glass");
+      }
+    }
+  }
+}
+
+/* ==========================================================
+   SKALA TAMPILAN — perombakan ukuran menyeluruh.
+   Saat situs dibuka lewat preview Muse (jendela sempit /
+   diperkecil), semua ukuran lama terasa pas; tetapi saat
+   dijalankan penuh di monitor desktop (server lokal /
+   GitHub Pages), huruf, ikon, dan kontrol lama — yang dulu
+   sempat diperkecil bertahap — terlihat terlalu kecil.
+   Blok ini menaikkan SELURUH skala secara proporsional:
+   tipografi (judul, isi, label), ikon sosial & tech stack,
+   kartu, carousel, dan footer. Aturannya sengaja ditaruh
+   paling akhir sebagai override per breakpoint supaya
+   mudah disesuaikan lagi tanpa membongkar komponen:
+     tablet (768–1023px)  → naik sedang (±1–8px)
+     desktop (>=1024px)   → skala penuh untuk monitor
+     desktop pendek       → sedikit diringkas supaya hero
+                            tetap muat satu layar laptop
+   ========================================================== */
+
+/* ---------- Tablet: skala sedang ---------- */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  body { font-size: 17px; }
+  .site-header h1 { font-size: 56px; }
+  .site-header h2 { font-size: 24px; }
+  .tagline { font-size: 16px; max-width: 400px; }
+  .nav-text { font-size: 13px; }
+  .burger-btn { width: 48px; height: 48px; }
+  .lang-toggle { font-size: 14px; padding: 10px 18px; }
+  .social-list { gap: 22px; }
+  .social-list svg { width: 22px; height: 22px; }
+  .social-list img.zenn-icon { width: 19px; height: 19px; }
+  .tech-stack { gap: 22px; }
+  .tech-stack img { height: 26px; }
+  .tech-stack img.tech-go { height: 48px; }
+  .pcard-name { font-size: 17px; }
+  .pcard.is-next .pcard-name, .pcard.is-hidden .pcard-name { font-size: 12.5px; }
+  .pc-arrow { width: 48px; height: 48px; }
+  .pc-counter { font-size: 14px; }
+  .pc-counter b { font-size: 17px; }
+  .section-title { font-size: 15px; }
+  .card-title { font-size: 18px; }
+  .prev-roles { font-size: 17px; }
+  .about-text { font-size: 16px; }
+  .card-desc { font-size: 16px; }
+  .tag-list li { font-size: 13px; padding: 5px 13px; }
+  .site-footer { font-size: 15px; }
+  .footer-icons img.contact-icon { width: 24px; height: 24px; }
+  .footer-icons svg.contact-icon-mail { width: 24px; height: 24px; }
+}
+
+/* ---------- Desktop: skala penuh ---------- */
+@media (min-width: 1024px) {
+  body { font-size: 18px; line-height: 1.65; }
+
+  /* Identitas */
+  .site-header h1 { font-size: 64px; }
+  .site-header h2 { font-size: 26px; margin-top: 14px; }
+  .tagline { font-size: 16px; line-height: 1.6; max-width: 400px; }
+
+  /* Navigasi */
+  .main-nav { margin-top: 44px; }
+  .nav-link { padding: 14px 0; }
+  .nav-indicator { width: 40px; margin-right: 20px; }
+  .nav-link:hover .nav-indicator,
+  .nav-link:focus-visible .nav-indicator,
+  .nav-link.active .nav-indicator { width: 80px; }
+  .nav-text { font-size: 14px; }
+
+  /* Toggle bahasa + ikon sosial */
+  .lang-toggle { font-size: 15px; padding: 11px 20px; }
+  .social-list { gap: 24px; }
+  .social-list svg { width: 24px; height: 24px; }
+  .social-list img.zenn-icon { width: 20px; height: 20px; }
+
+  /* Zenn Article (kolom kiri bawah) */
+  .featured { max-width: 430px; margin-top: 40px; }
+  .featured-label { font-size: 16px; }
+  .featured-label img { width: 18px; height: 18px; }
+  .featured-panel { padding: 16px 18px; }
+  .slides { min-height: 108px; }
+  .slide .judul { font-size: 17px; }
+  .slide .tag-list li { font-size: 13px; padding: 4px 12px; }
+  .dots { gap: 12px; margin-top: 10px; }
+  .dots button { width: 12px; height: 12px; }
+
+  /* Carousel proyek hero */
+  .showcase-label { font-size: 17px; }
+  .pcard-caption { left: 20px; right: 20px; bottom: 18px; }
+  .pcard-name { font-size: 19px; }
+  .pcard.is-next .pcard-name, .pcard.is-hidden .pcard-name { font-size: 14px; }
+  .pc-dots { gap: 14px; }
+  .pc-dots button { width: 11px; height: 11px; }
+  .pc-dots button.active { height: 42px; }
+  .pc-controls { gap: 14px; }
+  .pc-arrow { width: 54px; height: 54px; }
+  .pc-arrow svg { width: 22px; height: 22px; }
+  .pc-counter { font-size: 15px; }
+  .pc-counter b { font-size: 18px; }
+
+  /* Logo tech stack */
+  .tech-stack { gap: 24px; }
+  .tech-stack img { height: 30px; }
+  .tech-stack img.tech-go { height: 56px; }
+  /* Di desktop deretan logo duduk di pita bawah hero
+     (lihat penjelasan margin-top pada aturan dasar
+     .tech-stack--hero di atas). */
+  .tech-stack--hero { margin-top: 84px; }
+
+  /* Konten: About, kartu Experience / Projects */
+  .about-text { font-size: 16px; line-height: 1.65; }
+  .card { padding: 26px; }
+  .card-date { font-size: 14px; }
+  .card-title { font-size: 19px; }
+  .prev-roles { font-size: 18px; }
+  .card-desc { font-size: 16px; line-height: 1.6; }
+  .related-links a { font-size: 16px; }
+  .related-links svg { width: 16px; height: 16px; }
+  .tag-list { gap: 8px; }
+  .tag-list li { font-size: 14px; padding: 5px 14px; }
+  .arrow-icon { width: 19px; height: 19px; }
+  .text-link { font-size: 18px; }
+  .installs-link { font-size: 16px; }
+  .installs-link svg { width: 16px; height: 16px; }
+
+  /* Footer */
+  .site-footer { font-size: 16px; }
+  .footer-icons { gap: 20px; }
+  .footer-icons img.contact-icon { width: 26px; height: 26px; }
+  .footer-icons svg.contact-icon-mail { width: 26px; height: 26px; }
+
+  /* Spotlight kursor ikut membesar mengikuti skala baru */
+  .spotlight {
+    background: radial-gradient(
+      760px circle at var(--spot-x) var(--spot-y),
+      rgba(255, 255, 255, 0.07),
+      transparent 80%
+    );
+  }
+}
+
+/* Desktop dengan layar pendek (laptop): skala tetap besar,
+   tetapi jarak vertikal diringkas supaya kolom kiri —
+   identitas, navigasi, dan Zenn Article — tetap muat
+   dalam satu tinggi layar. */
+@media (min-width: 1024px) and (max-height: 820px) {
+  .site-header h1 { font-size: 52px; }
+  .site-header h2 { font-size: 22px; }
+  .tagline { font-size: 15px; }
+  .main-nav { margin-top: 24px; }
+  .nav-link { padding: 11px 0; }
+  .featured { margin-top: 24px; }
+  .slides { min-height: 92px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}

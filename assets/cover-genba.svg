@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="Genba Connect project cover">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1c1c1c"/>
+      <stop offset="1" stop-color="#0d0d0d"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.04"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <circle cx="690" cy="70" r="150" fill="#ffffff" opacity="0.04"/>
+  <circle cx="90" cy="450" r="120" fill="#ffffff" opacity="0.03"/>
+
+  <!-- Motif: tiga panel terjemahan berdampingan (tanpa tulisan;
+       judul proyek tampil sebagai teks HTML di atas gambar) -->
+  <g transform="translate(0 82)">
+    <rect x="70" y="86" width="190" height="150" rx="16" fill="url(#glass)" stroke="#ffffff" stroke-opacity="0.25"/>
+    <rect x="92" y="112" width="110" height="10" rx="5" fill="#e5e5e5" opacity="0.75"/>
+    <rect x="92" y="140" width="146" height="8" rx="4" fill="#a3a3a3" opacity="0.7"/>
+    <rect x="92" y="162" width="128" height="8" rx="4" fill="#a3a3a3" opacity="0.5"/>
+    <rect x="92" y="184" width="90" height="8" rx="4" fill="#a3a3a3" opacity="0.35"/>
+
+    <rect x="305" y="86" width="190" height="150" rx="16" fill="url(#glass)" stroke="#ffffff" stroke-opacity="0.25"/>
+    <rect x="327" y="112" width="110" height="10" rx="5" fill="#e5e5e5" opacity="0.75"/>
+    <rect x="327" y="140" width="146" height="8" rx="4" fill="#a3a3a3" opacity="0.7"/>
+    <rect x="327" y="162" width="128" height="8" rx="4" fill="#a3a3a3" opacity="0.5"/>
+    <rect x="327" y="184" width="90" height="8" rx="4" fill="#a3a3a3" opacity="0.35"/>
+
+    <rect x="540" y="86" width="190" height="150" rx="16" fill="url(#glass)" stroke="#ffffff" stroke-opacity="0.25"/>
+    <rect x="562" y="112" width="110" height="10" rx="5" fill="#e5e5e5" opacity="0.75"/>
+    <rect x="562" y="140" width="146" height="8" rx="4" fill="#a3a3a3" opacity="0.7"/>
+    <rect x="562" y="162" width="128" height="8" rx="4" fill="#a3a3a3" opacity="0.5"/>
+    <rect x="562" y="184" width="90" height="8" rx="4" fill="#a3a3a3" opacity="0.35"/>
+  </g>
+</svg>
