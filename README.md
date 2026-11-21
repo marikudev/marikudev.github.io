@@ -4,7 +4,7 @@ Personal portfolio of **Malik**, a web engineer based in Japan.
 Built with **100% vanilla HTML, CSS, and JavaScript** — no frameworks,
 no libraries, no build tools.
 
-**Live site:** https://marikudev.github.io
+**Live site:** https://mariku.is-a.dev
 
 日本語の説明は下部にあります。
 
